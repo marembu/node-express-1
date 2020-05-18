@@ -11,6 +11,7 @@ function movieApi(app) {
 
   router.get('/', async function (req, res, next) {
     const { tags } = req.query;
+    //throw new Error('error personalizado')
     try {
       const movie = await moviesService.getMovies({ tags });
       res.status(200).json({
