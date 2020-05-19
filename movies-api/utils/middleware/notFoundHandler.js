@@ -1,5 +1,8 @@
-// const boom = require('@hapi/boom')// eslint-disable-line
+const boom = require('@hapi/boom')
 
-// function notFoundHandler(req, res){// eslint-disable-line
-    
-// }
+function notFoundHandler(req, res){
+ const { output: { statusCode, payload } } = boom.notFound()
+ res.status(statusCode).json(payload)   
+}
+
+module.exports = notFoundHandler

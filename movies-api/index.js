@@ -3,11 +3,17 @@ const { config } = require('./config/index');
 const app = express();
 const moviesApi = require('./routes/movies');
 const { logErrors, wrapError, errorHandler } = require('./utils/middleware/errorHandlers')
+const notFoundHandler  = require('./utils/middleware/notFoundHandler')
 
 //body parser
 app.use(express.json());
+
 //routes
 moviesApi(app);
+
+//catch error 404
+app.use(notFoundHandler)
+
 //errors middlewares
 app.use(logErrors)
 app.use(wrapError)
