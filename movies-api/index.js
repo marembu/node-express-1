@@ -2,9 +2,13 @@ const express = require('express');
 const { config } = require('./config/index');
 const app = express();
 const moviesApi = require('./routes/movies');
-const { logErrors, wrapError, errorHandler } = require('./utils/middleware/errorHandlers')
-const notFoundHandler  = require('./utils/middleware/notFoundHandler')
-
+const {
+  logErrors,
+  wrapError,
+  errorHandler,
+} = require('./utils/middleware/errorHandlers');
+const notFoundHandler = require('./utils/middleware/notFoundHandler');
+const debug = require('debug')('app:server');
 //body parser
 app.use(express.json());
 
@@ -12,15 +16,15 @@ app.use(express.json());
 moviesApi(app);
 
 //catch error 404
-app.use(notFoundHandler)
+app.use(notFoundHandler);
 
 //errors middlewares
-app.use(logErrors)
-app.use(wrapError)
-app.use(errorHandler)
+app.use(logErrors);
+app.use(wrapError);
+app.use(errorHandler);
 
 app.listen(config.port, function () {
-  console.log(`Listening http://localhost:${config.port}`);
+  debug(`Listening http://localhost:${config.port}`);
 });
 
 // app.get('/', function (req, res) {

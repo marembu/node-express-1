@@ -8,6 +8,8 @@ const DB_NAME = config.dbName;
 
 const MONGO_URI = `mongodb+srv://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${DB_NAME}?retryWrites=true&w=majority`;
 
+const debug = require('debug')('app:db');
+
 class MongoLib {
   constructor() {
     this.client = new MongoClient(MONGO_URI, {
@@ -21,10 +23,10 @@ class MongoLib {
       MongoLib.connection = new Promise((resolve, reject) => {
         this.client.connect((err) => {
           if (err) {
-            console.log(err);
+            debug(err);
             reject(err);
           }
-          console.log('Connected successfuly to mongo');
+          debug('Connected successfuly to mongo');
           resolve(this.client.db(this.dbName));
         });
       });
