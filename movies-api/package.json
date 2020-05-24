@@ -1,5 +1,5 @@
 {
-  "name": "movies-api",
+  "name": "node-express-one",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,9 +13,13 @@
     "report:wsl": "npm run cover; nyc report --reporter=html && URL='./coverage/index.html'; xdg-open $URL || sensible-browser $URL || x-www-browser $URL",
     "report:mac": "nyc report --reporter=html && open coverage/index.html"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marembu/node-express-1.git"
+  },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@hapi/boom": "^9.1.0",
     "@hapi/joi": "15.0.3",
