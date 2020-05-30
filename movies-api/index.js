@@ -1,19 +1,25 @@
 const express = require('express');
 const { config } = require('./config/index');
 const app = express();
+
 const moviesApi = require('./routes/movies');
+const userMoviesApi = require('./routes/userMovies');
+
 const {
   logErrors,
   wrapError,
   errorHandler,
 } = require('./utils/middleware/errorHandlers');
+
 const notFoundHandler = require('./utils/middleware/notFoundHandler');
 const debug = require('debug')('app:server');
+
 //body parser
 app.use(express.json());
 
 //routes
 moviesApi(app);
+userMoviesApi(app);
 
 //catch error 404
 app.use(notFoundHandler);
