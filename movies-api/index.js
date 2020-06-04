@@ -4,6 +4,7 @@ const app = express();
 
 const moviesApi = require('./routes/movies');
 const userMoviesApi = require('./routes/userMovies');
+const authApi = require('./routes/auth');
 
 const {
   logErrors,
@@ -18,6 +19,7 @@ const debug = require('debug')('app:server');
 app.use(express.json());
 
 //routes
+authApi(app);
 moviesApi(app);
 userMoviesApi(app);
 
