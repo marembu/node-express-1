@@ -6,7 +6,7 @@ function scopesValidation(allowedScopes) {
       next(boom.unauthorized('Missing Scopes'));
     }
     const hasAccess = allowedScopes
-      .map((scope) => req.user.scopes.includes(scope))
+      .map((allowedScope) => req.user.scopes.includes(allowedScope))
       .find((allowed) => Boolean(allowed));
 
     if (hasAccess) {
