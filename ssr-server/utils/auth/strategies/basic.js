@@ -7,18 +7,18 @@ const boom = require("@hapi/boom");
 passport.use(
   new BasicStrategy(async function (email, password, cb) {
     try {
-      const response = await axios({
+      const { data, status } = await axios({
         url: `${config.apiUrl}/api/auth/sign-in`,
         method: "post",
         auth: {
-          user: email,
+          username: email,
           password,
         },
         data: {
           apiKeyToken: config.apiKeyToken,
         },
       });
-      const { data, status } = response;
+
       if (!data || status != 200) {
         return cb(boom.unauthorized(), false);
       }
