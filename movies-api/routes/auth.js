@@ -6,7 +6,10 @@ const UsersService = require('../services/users');
 const jwt = require('jsonwebtoken');
 const { config } = require('../config/index');
 const validationHandler = require('../utils/middleware/validationHandler');
-const { createUserSchema } = require('../utils/schemas/users');
+const {
+  createUserSchema,
+  createProviderUserSchema,
+} = require('../utils/schemas/users');
 //Basic strategy
 require('../utils/auth/strategies/basic');
 
@@ -85,24 +88,50 @@ function apiAuth(app) {
       next(error);
     }
   });
+
+  router.post(
+    '/sign-provider',
+    validationHandler(createProviderUserSchema),
+    async function (req, res, next) {
+      const { body } = req;
+      const { apiKeyToken, ...user } = body;
+      if (!apiKeyToken) {
+        next(boom.unauthorized('Missing Api Key Token'));
+      }
+      try {
+        const queriedUser = await usersService.getOrCreateUser({ user });
+        const apiKey = await apiKeysService.getApiKey({ token: apiKeyToken });
+
+        if (!apiKey) {
+          next(boom.unauthorized());
+        }
+
+        const { _id: id, name, email } = queriedUser;
+
+        const payload = {
+          sub: id,
+          name,
+          email,
+          scopes: apiKey.scopes,
+        };
+
+        const token = jwt.sign(payload, config.authJwtSecret, {
+          expiresIn: '15min',
+        });
+
+        res.status(200).json({
+          token,
+          user: {
+            id,
+            name,
+            email,
+          },
+        });
+      } catch (error) {
+        next(error);
+      }
+    }
+  );
 }
 
 module.exports = apiAuth;
-
-// router.post('/sign-up', validationHandler(createUserSchema), async function (
-//   req,
-//   res,
-//   next
-// ) {
-//   const { user } = req.body;
-//   const usersService = new UsersService();
-//   try {
-//     const createdUserId = await usersService.createUser({ user });
-//     res.status(201).json({
-//       data: createdUserId,
-//       message: 'user created',
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
