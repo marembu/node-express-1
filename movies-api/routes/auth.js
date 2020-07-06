@@ -119,7 +119,7 @@ function apiAuth(app) {
           expiresIn: '15min',
         });
 
-        res.status(200).json({
+        return res.status(200).json({
           token,
           user: {
             id,

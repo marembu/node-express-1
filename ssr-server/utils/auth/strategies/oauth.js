@@ -2,6 +2,7 @@ const passport = require("passport");
 const { OAuth2Strategy } = require("passport-oauth");
 const axios = require("axios");
 const boom = require("@hapi/boom");
+
 const { config } = require("../../../config/index");
 
 const GOOGLE_AUTHORIZATION_URL = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -17,7 +18,7 @@ const oAuth2Strategy = new OAuth2Strategy(
     callbackURL: "/auth/google-oauth/callback",
   },
   async function (accessToken, refreshToken, profile, cb) {
-    const { data, status } = axios({
+    const { data, status } = await axios({
       url: `${config.apiUrl}/api/auth/sign-provider`,
       method: "post",
       data: {
